@@ -1,39 +1,55 @@
-import { useState, useRef } from 'react';
+import { useRef } from 'react';
 import { HotKeys } from "react-hotkeys";
 import confetti from 'canvas-confetti';
 function App() {
-  const [wordsArray, setWordsArray] = useState(["c", "h", "a", "n", "g", "w", "o", "r", "k", "s"]);
+  const changworksWordsArray = ["c", "h", "a", "n", "g", "w", "o", "r", "k", "s"];
   const currentIndex = useRef(0);
+
+  const onKeyUp = (e) => {
+    if(!changworksWordsArray.includes(e.key)){
+      currentIndex.current = 0;
+    }
+  }
+
   const checkAndShowConfetti = (e) => {
-    if (e.key === wordsArray[currentIndex.current]) {
+    if (e.key === changworksWordsArray[currentIndex.current]) {
       confetti();
       currentIndex.current++;
-    } else if (e.key === wordsArray[0]) {
+    } else if (e.key === changworksWordsArray[0]) {
       currentIndex.current = 1;
     } else {
       currentIndex.current = 0;
     }
+    if (currentIndex.current === 10) {
+      currentIndex.current = 0;
+    }
   }
+
   const keyMap = {
-    changworks: ["c", "h", "a", "n", "g", "w", "o", "r", "k", "s"],
+    changworks: changworksWordsArray,
   };
+
   const handlers = {
     changworks: checkAndShowConfetti
   };
+
+  
   return (
-    <HotKeys keyMap={keyMap} handlers={handlers} style={{
-      outline: "none"
-    }}>
-      <div style={{
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-        height: '100vh'
+    <div onKeyUp={onKeyUp}>
+      <HotKeys keyMap={keyMap} handlers={handlers} style={{
+        outline: "none"
       }}>
-        Type "changworks"
-      </div>
-    </HotKeys>
+        <div style={{
+          display: 'flex',
+          flexDirection: 'column',
+          alignItems: 'center',
+          justifyContent: 'center',
+          height: '100vh'
+        }}>
+          Type "changworks"
+        </div>
+      </HotKeys>
+    </div>
   );
 }
 
